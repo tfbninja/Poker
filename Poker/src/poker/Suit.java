@@ -8,24 +8,64 @@ package poker;
 /*
  * Suits: ♥,♦,♣,♠
  */
-public class PokerRunner {
+public class Suit {
+    private String suitString;
 
-    public static void main(String[] args) throws Exception {
-        System.out.println("\nCreated by Tim Barber, October 2018\n");
-        Deck mainDeck = new Deck("Standard");
-        Deck burnPile = new Deck();
+    public Suit(){
+        suitString = "";
+    }
 
-        mainDeck.setDebugMode(false);
-        mainDeck.shuffle(56);
+    public Suit(String suit){
+        suitString = suit.toLowerCase();
+    }
 
-        System.out.println("Burn deck: >" + burnPile.toOrganizedString() + "<");
+    public String getSuit(){
+        return suitString;
+    }
 
-        System.out.println("Shuffled deck: " + mainDeck);
-        System.out.println("Duplicates test: " + mainDeck.testDuplicates());
+    public void setSuit(String suit){
+        suitString = suit.toLowerCase();
+    }
 
+    public String intToSuit(int suitnum){
+        switch(suitnum){
+            case 0:
+                return "hearts";
+            case 1:
+                return "diamonds";
+            case 2:
+                return "clubs";
+            case 3:
+                return "spades";
+            default:
+                return "invalid";
+        }
+    }
+    
+    public char unicodeChar(String suit){
+        suit = suit.toLowerCase();
+        switch(suit){
+            case "hearts":
+                return '♥';
+            case "diamonds":
+                return '♦';
+            case "clubs":
+                return '♣';
+            case "spades":
+                return '♠';
+            default:
+                return '-';
+        }
+    }
+
+    @Override
+    public String toString(){
+        return String.valueOf(unicodeChar(suitString));
     }
 
 }
+
+
 /*
  * The MIT License
  *

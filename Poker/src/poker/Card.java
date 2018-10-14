@@ -4,28 +4,36 @@ package poker;
  *
  * @author Tim Barber
  */
+public class Card {
 
-/*
- * Suits: ♥,♦,♣,♠
- */
-public class PokerRunner {
+    private Rank thisrank;
+    private Suit thissuit;
 
-    public static void main(String[] args) throws Exception {
-        System.out.println("\nCreated by Tim Barber, October 2018\n");
-        Deck mainDeck = new Deck("Standard");
-        Deck burnPile = new Deck();
-
-        mainDeck.setDebugMode(false);
-        mainDeck.shuffle(56);
-
-        System.out.println("Burn deck: >" + burnPile.toOrganizedString() + "<");
-
-        System.out.println("Shuffled deck: " + mainDeck);
-        System.out.println("Duplicates test: " + mainDeck.testDuplicates());
-
+    public Card() {
+        thisrank = new Rank("");
+        thissuit = new Suit("");
     }
 
+    public Card(String rank, String suit) {
+        thisrank = new Rank(rank);
+        thissuit = new Suit(suit);
+    }
+
+    public String getRank() {
+        return thisrank.toString();
+    }
+
+    public String getSuit() {
+        return thissuit.toString();
+    }
+
+    @Override
+    public String toString() {
+        return thisrank.toString() + thissuit.toString();
+    }
 }
+
+
 /*
  * The MIT License
  *

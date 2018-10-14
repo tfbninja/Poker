@@ -4,25 +4,30 @@ package poker;
  *
  * @author Tim Barber
  */
+public class DeckTester {
 
-/*
- * Suits: ♥,♦,♣,♠
- */
-public class PokerRunner {
+    private static Deck testDeck = new Deck("Standard");
 
     public static void main(String[] args) throws Exception {
-        System.out.println("\nCreated by Tim Barber, October 2018\n");
-        Deck mainDeck = new Deck("Standard");
-        Deck burnPile = new Deck();
+        testDeck.setDebugMode(false);
+        testDeck.setPerfectionOffset(4);
 
-        mainDeck.setDebugMode(false);
-        mainDeck.shuffle(56);
+        testDeck.cut(5);
+        verbiage();
+        testDeck.cut(5);
+        verbiage();
+        testDeck.cut(5);
+        verbiage();
+    }
 
-        System.out.println("Burn deck: >" + burnPile.toOrganizedString() + "<");
+    public static void verbiage(Deck deckus) {
+        System.out.println("New deck: " + deckus);
+        System.out.println("Duplicates test: " + deckus.testDuplicates());
+    }
 
-        System.out.println("Shuffled deck: " + mainDeck);
-        System.out.println("Duplicates test: " + mainDeck.testDuplicates());
-
+    public static void verbiage() {
+        System.out.println("New deck: " + testDeck);
+        System.out.println("Duplicates test: " + testDeck.testDuplicates());
     }
 
 }
