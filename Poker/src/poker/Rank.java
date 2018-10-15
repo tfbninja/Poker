@@ -4,6 +4,10 @@ package poker;
  *
  * @author Tim Barber
  */
+
+/*
+ * Suits: ♥,♦,♣,♠
+ */
 public class Rank {
 
     private String rankString;
@@ -24,10 +28,12 @@ public class Rank {
         rankString = rank.toLowerCase();
     }
 
-    public String intToRank(int ranknum){
-        switch(ranknum){
+    public String intToRank(int ranknum) {
+        switch (ranknum) {
             case 1:
                 return "A";
+            case 10:
+                return "T";
             case 11:
                 return "J";
             case 12:
@@ -35,7 +41,7 @@ public class Rank {
             case 13:
                 return "K";
             default:
-                return String.valueOf(ranknum);
+                return String.valueOf(ranknum).substring(0, 1);
         }
     }
 

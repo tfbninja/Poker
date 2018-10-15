@@ -9,6 +9,10 @@ import java.util.Random;
  *
  * @author Tim Barber
  */
+
+/*
+ * Suits: ♥,♦,♣,♠
+ */
 public class Deck {
 
     private Random random = new Random();
@@ -46,6 +50,11 @@ public class Deck {
         perfectionOffset = 0;
     }
 
+    public Deck(ArrayList<Card> cards) {
+        this.debugMode = false;
+        this.setTypeCards(cards);
+    }
+
     public Deck(String type, int perfectionOffsetAmt) {
         this.debugMode = false;
         setType(type);
@@ -71,6 +80,30 @@ public class Deck {
 
     public int getSize() {
         return cardList.size();
+    }
+
+    public void clear() {
+        cardList.clear();
+    }
+
+    public void setCard(int numFromTop, String card) {
+        cardList.set(numFromTop, card);
+    }
+
+    public void setCard(int numFromTop, Card card) {
+        cardList.set(numFromTop, card.toString());
+    }
+
+    public void setCards(ArrayList<String> cards) {
+        cardList = cards;
+    }
+
+    public void setTypeCards(ArrayList<Card> cards) {
+        int i = 0;
+        for (Card card : cards) {
+            setCard(i, card);
+            i++;
+        }
     }
 
     public String get(int cardNumFromTop) {

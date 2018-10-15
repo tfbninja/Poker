@@ -4,20 +4,30 @@ package poker;
  *
  * @author Tim Barber
  */
-public class DeckTester {
+
+/*
+ * Suits: ♥,♦,♣,♠
+ */
+public class PokerTester {
 
     private static Deck testDeck = new Deck("Standard");
+    private static Player testPlayer = new Player();
 
     public static void main(String[] args) throws Exception {
-        testDeck.setDebugMode(false);
-        testDeck.setPerfectionOffset(4);
+        //System.out.println(testPlayer);
+        testPlayer.setName("Tim");
+        //System.out.println(testPlayer);
+        Hand Player1 = new Hand(CardList.ACEOFCLUBS, CardList.NINEOFHEARTS);
+        System.out.println(Player1);
+        //testPlayer.setCards(Player1);
+        //System.out.println(testPlayer);
 
-        testDeck.cut(5);
-        verbiage();
-        testDeck.cut(5);
-        verbiage();
-        testDeck.cut(5);
-        verbiage();
+        /*
+         * testDeck.setDebugMode(false); testDeck.setPerfectionOffset(4);
+         *
+         * testDeck.cut(5); verbiage(); testDeck.cut(5); verbiage();
+         * testDeck.cut(5); verbiage();
+         */
     }
 
     public static void verbiage(Deck deckus) {

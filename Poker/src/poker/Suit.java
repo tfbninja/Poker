@@ -54,7 +54,7 @@ public class Suit {
             case "spades":
                 return '♠';
             default:
-                return '-';
+                return suit.charAt(0);
         }
     }
 

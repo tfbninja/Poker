@@ -1,40 +1,33 @@
 package poker;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Tim Barber
  */
+public class Hand extends Deck {
 
-/*
- * Suits: ♥,♦,♣,♠
- */
-public class Card {
+    private final int size = 2;
+    private ArrayList<String> cardList;
 
-    private Rank thisrank;
-    private Suit thissuit;
-
-    public Card() {
-        thisrank = new Rank("");
-        thissuit = new Suit("");
+    public Hand() {
     }
 
-    public Card(String rank, String suit) {
-        thisrank = new Rank(rank);
-        thissuit = new Suit(suit);
+    public Hand(ArrayList<String> cards) {
+        this.cardList = cards;
     }
 
-    public String getRank() {
-        return thisrank.toString();
+    public Hand(Deck cards) {
+        this.cardList = cards.toArrayList();
     }
 
-    public String getSuit() {
-        return thissuit.toString();
+    public Hand(Card card1, Card card2) {
+        System.out.println(card1);
+        this.cardList.add(card1.toString());
+        this.cardList.add(card2.toString());
     }
 
-    @Override
-    public String toString() {
-        return thisrank.toString() + thissuit.toString();
-    }
 }
 
 
