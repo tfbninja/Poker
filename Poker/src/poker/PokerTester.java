@@ -17,8 +17,8 @@ public class PokerTester {
         //System.out.println(testPlayer);
         testPlayer.setName("Tim");
         //System.out.println(testPlayer);
-        Hand Player1 = new Hand(CardList.ACEOFCLUBS, CardList.NINEOFHEARTS);
-        System.out.println(Player1);
+        Hand player1Hand = new Hand(CardList.ACEOFCLUBS, CardList.NINEOFHEARTS);
+        System.out.println(player1Hand);
         //testPlayer.setCards(Player1);
         //System.out.println(testPlayer);
 

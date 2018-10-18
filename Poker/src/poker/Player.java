@@ -9,7 +9,7 @@ import java.util.Random;
 public class Player {
 
     private int money;
-    private Hand cards;
+    private Hand hand;
     private String name;
     Random random;
     private boolean isDealer;
@@ -24,7 +24,7 @@ public class Player {
         this.random = new Random(0);
         this.isAllIn = false;
         this.money = 0;
-        this.cards = new Hand();
+        this.hand = new Hand();
         this.name = "Player " + String.valueOf(Math.abs(random.nextInt()));
         this.isDealer = false;
         this.isLittle = false;
@@ -32,7 +32,7 @@ public class Player {
         this.isAllIn = false;
 
         if (debugMode) {
-            System.out.println("Player instantiated with no vars, Name: " + this.name + ", Money: " + this.money + ", Cards: " + this.cards + "");
+            System.out.println("Player instantiated with no vars, Name: " + this.name + ", Money: " + this.money + ", Cards: " + this.hand + "");
         }
     }
 
@@ -40,7 +40,7 @@ public class Player {
         this.isAllIn = false;
         this.name = name;
         this.money = money;
-        this.cards = cards;
+        this.hand = cards;
 
         this.isDealer = false;
         this.isLittle = false;
@@ -49,7 +49,7 @@ public class Player {
         this.random = new Random(0);
 
         if (debugMode) {
-            System.out.println("Player instantiated with vars, Name: " + this.name + ", Money: " + this.money + ", Cards: " + this.cards + "");
+            System.out.println("Player instantiated with vars, Name: " + this.name + ", Money: " + this.money + ", Cards: " + this.hand + "");
         }
     }
 
@@ -62,11 +62,11 @@ public class Player {
     }
 
     public Hand getCards() {
-        return this.cards;
+        return this.hand;
     }
 
     public void setCards(Hand cards) {
-        this.cards = cards;
+        this.hand = cards;
     }
 
     public void setName(String name) {
@@ -111,7 +111,7 @@ public class Player {
 
     @Override
     public String toString() {
-        return this.name + ": Money: " + this.money + ", Cards: " + this.cards
+        return this.name + ": Money: " + this.money + ", Cards: " + this.hand
                 + ", is all in: " + this.isAllIn + ", is dealer: " + this.isDealer
                 + ", is little blind: " + this.isLittle + ", is big blind: "
                 + this.isBig + ".";

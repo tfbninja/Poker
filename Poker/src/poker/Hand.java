@@ -8,24 +8,87 @@ import java.util.ArrayList;
  */
 public class Hand extends Deck {
 
-    private final int size = 2;
-    private ArrayList<String> cardList;
+    private String card1;
+    private String card2;
+
+    private boolean debugMode = false;
 
     public Hand() {
+        this.card1 = "";
+        this.card2 = "";
     }
 
     public Hand(ArrayList<String> cards) {
-        this.cardList = cards;
+        this.card1 = cards.get(0);
+        this.card2 = cards.get(1);
     }
 
     public Hand(Deck cards) {
-        this.cardList = cards.toArrayList();
+        this.card1 = cards.get(0);
+        this.card2 = cards.get(1);
     }
 
     public Hand(Card card1, Card card2) {
-        System.out.println(card1);
-        this.cardList.add(card1.toString());
-        this.cardList.add(card2.toString());
+        this.card1 = card1.toString();
+        this.card2 = card2.toString();
+    }
+
+    public Hand(String card1, String card2) {
+        this.card1 = card1;
+        this.card2 = card2;
+    }
+
+    public void setCards(ArrayList<String> cards) {
+        this.card1 = cards.get(0);
+        this.card2 = cards.get(1);
+    }
+
+    public void setCards(Card card1, Card card2) {
+        this.card1 = card1.toString();
+        this.card2 = card2.toString();
+    }
+
+    public void setCards(String card1, String card2) {
+        this.card1 = card1;
+        this.card2 = card2;
+    }
+
+    public void setCards(Deck cards) {
+        this.card1 = cards.get(0);
+        this.card2 = cards.get(1);
+    }
+
+    public void setCard(int which, String value) {
+        if (which == 1) {
+            this.card1 = value;
+        } else {
+            this.card2 = value;
+        }
+    }
+
+    public String toSimpleString() {
+        return this.card1 + this.card2;
+    }
+
+    public String[] toStringList() {
+        String[] temp = new String[2];
+        temp[0] = this.card1;
+        temp[1] = this.card2;
+        return temp;
+    }
+
+    @Override
+    public void setDebugMode(boolean mode) {
+        this.debugMode = mode;
+    }
+
+    @Override
+    public String toString() {
+        if (debugMode) {
+            System.out.println("---Method toString()---");
+        }
+        return "Hand: " + this.card1 + ", " + this.card2;
+
     }
 
 }
