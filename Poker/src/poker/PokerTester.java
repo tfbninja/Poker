@@ -11,11 +11,17 @@ package poker;
 public class PokerTester {
 
     private static Deck testDeck = new Deck("Standard");
-    private static Player testPlayer = new Player();
+    private static Player player1 = new Player();
+    private static Player player2 = new Player();
 
     public static void main(String[] args) throws Exception {
         //System.out.println(testPlayer);
-        testPlayer.setName("Tim");
+        player1.setName("Bob");
+        player2.setName("Joe");
+
+        testDeck.shuffle();
+        //get hands here
+
         //System.out.println(testPlayer);
         Hand player1Hand = new Hand(CardList.ACEOFCLUBS, CardList.NINEOFHEARTS);
         System.out.println(player1Hand);
