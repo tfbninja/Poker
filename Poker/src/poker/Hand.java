@@ -10,32 +10,42 @@ public class Hand extends Deck {
 
     private String card1;
     private String card2;
+    private String playerName;
 
     private boolean debugMode = false;
 
     public Hand() {
         this.card1 = "";
         this.card2 = "";
+        this.playerName = "";
     }
 
     public Hand(ArrayList<String> cards) {
         this.card1 = cards.get(0);
         this.card2 = cards.get(1);
+        this.playerName = "";
     }
 
     public Hand(Deck cards) {
         this.card1 = cards.get(0);
         this.card2 = cards.get(1);
+        this.playerName = "";
     }
 
     public Hand(Card card1, Card card2) {
         this.card1 = card1.toString();
         this.card2 = card2.toString();
+        this.playerName = "";
     }
 
     public Hand(String card1, String card2) {
         this.card1 = card1;
         this.card2 = card2;
+        this.playerName = "";
+    }
+
+    public void setPlayerName(String name) {
+        this.playerName = name;
     }
 
     public void setCards(ArrayList<String> cards) {
@@ -87,7 +97,7 @@ public class Hand extends Deck {
         if (debugMode) {
             System.out.println("---Method toString()---");
         }
-        return "Hand: " + this.card1 + ", " + this.card2;
+        return this.playerName + " hand: " + this.card1 + ", " + this.card2;
 
     }
 

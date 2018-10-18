@@ -9,43 +9,45 @@ package poker;
  * Suits: ♥,♦,♣,♠
  */
 public class PokerTester {
-
+    
     private static Deck testDeck = new Deck("Standard");
     private static Player player1 = new Player();
     private static Player player2 = new Player();
-
+    
     public static void main(String[] args) throws Exception {
         //System.out.println(testPlayer);
         player1.setName("Bob");
         player2.setName("Joe");
-
+        
         testDeck.shuffle();
-        //get hands here
-
-        //System.out.println(testPlayer);
-        Hand player1Hand = new Hand(CardList.ACEOFCLUBS, CardList.NINEOFHEARTS);
+        
+        Hand player1Hand = new Hand();
+        Hand player2Hand = new Hand();
+        
+        player1Hand.setPlayerName("Player 1");
+        player2Hand.setPlayerName("Player 2");
+        
+        String[] hands = testDeck.deal(2);
+        
+        player1Hand.setCards(hands[0], hands[1]);
+        player2Hand.setCards(hands[2], hands[3]);
+        
         System.out.println(player1Hand);
-        //testPlayer.setCards(Player1);
-        //System.out.println(testPlayer);
-
-        /*
-         * testDeck.setDebugMode(false); testDeck.setPerfectionOffset(4);
-         *
-         * testDeck.cut(5); verbiage(); testDeck.cut(5); verbiage();
-         * testDeck.cut(5); verbiage();
-         */
+        System.out.println(player2Hand);
+        System.out.println(testDeck);
+        System.out.println(testDeck.getSize());
     }
-
+    
     public static void verbiage(Deck deckus) {
         System.out.println("New deck: " + deckus);
         System.out.println("Duplicates test: " + deckus.testDuplicates());
     }
-
+    
     public static void verbiage() {
         System.out.println("New deck: " + testDeck);
         System.out.println("Duplicates test: " + testDeck.testDuplicates());
     }
-
+    
 }
 /*
  * The MIT License

@@ -190,6 +190,30 @@ public class Deck {
         }
     }
 
+    public String[] takeCardsTop(int amt) {
+        String[] cards = new String[amt];
+        for (int i = 0; i < amt; i++) {
+            cards[i] = cardList.get(0);
+            this.cardList.remove(0);
+        }
+        return cards;
+    }
+
+    public String[] deal(int numHands) {
+        String[] hands = new String[numHands * 2];
+        for (int i = 0; i <= numHands; i += 2) { // 0, 2
+            hands[i] = this.dealCardTop();
+        }
+        for (int i = 1; i <= numHands + 1; i += 2) {
+            hands[i] = this.dealCardTop();
+        }
+        return hands;
+    }
+
+    public String dealCardTop() {
+        return cardList.remove(0);
+    }
+
     public ArrayList<String> cut(int numCards) {
         //cuts off top
 
