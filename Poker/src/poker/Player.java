@@ -11,7 +11,7 @@ public class Player {
     private int money;
     private Hand hand;
     private String name;
-    Random random;
+    private Random random;
     private boolean isDealer;
     private boolean isLittle;
     private boolean isBig;

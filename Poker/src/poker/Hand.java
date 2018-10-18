@@ -96,6 +96,7 @@ public class Hand extends Deck {
     public String toString() {
         if (debugMode) {
             System.out.println("---Method toString()---");
+            System.out.println(this.playerName + " hand: " + this.card1 + ", " + this.card2 + "\n---End of Method toString()---");
         }
         return this.playerName + " hand: " + this.card1 + ", " + this.card2;
 

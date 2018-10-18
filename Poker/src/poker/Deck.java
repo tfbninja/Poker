@@ -200,12 +200,12 @@ public class Deck {
     }
 
     public String[] deal(int numHands) {
-        String[] hands = new String[numHands * 2];
-        for (int i = 0; i <= numHands; i += 2) { // 0, 2
-            hands[i] = this.dealCardTop();
+        String[] hands = new String[numHands * 2]; // Twice as many cards as hands
+        for (int i = 0; i <= numHands; i += 2) {
+            System.out.println(hands[i] = this.dealCardTop());
         }
         for (int i = 1; i <= numHands + 1; i += 2) {
-            hands[i] = this.dealCardTop();
+            System.out.println(hands[i] = this.dealCardTop());
         }
         return hands;
     }

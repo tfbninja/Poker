@@ -10,42 +10,49 @@ package poker;
  */
 public class PokerTester {
     
-    private static Deck testDeck = new Deck("Standard");
-    private static Player player1 = new Player();
-    private static Player player2 = new Player();
-    
+    private static Deck testDeck = new Deck("Standard"); // Init main deck
+    private static Player player1 = new Player(); // Make player 1
+    private static Player player2 = new Player(); // Make player 2
+    private static Player player3 = new Player(); // Make player 3
+
     public static void main(String[] args) throws Exception {
-        //System.out.println(testPlayer);
-        player1.setName("Bob");
-        player2.setName("Joe");
-        
-        testDeck.shuffle();
-        
-        Hand player1Hand = new Hand();
+        player1.setName("Bob"); // Name player 1
+        player2.setName("Joe"); // Name player 2
+        player3.setName("Jim"); // Name player 3
+        testDeck.setDebugMode(true);
+
+        testDeck.shuffle(); // Shuffle the deck
+
+        Hand player1Hand = new Hand(); // Init hands
         Hand player2Hand = new Hand();
+        Hand player3Hand = new Hand();
+        player3Hand.setDebugMode(true);
         
-        player1Hand.setPlayerName("Player 1");
-        player2Hand.setPlayerName("Player 2");
+        player1Hand.setPlayerName(player1.getName()); //Name the hands to their respective players
+        player2Hand.setPlayerName(player2.getName());
+        player3Hand.setPlayerName(player3.getName());
         
-        String[] hands = testDeck.deal(2);
-        
-        player1Hand.setCards(hands[0], hands[1]);
-        player2Hand.setCards(hands[2], hands[3]);
-        
-        System.out.println(player1Hand);
-        System.out.println(player2Hand);
         System.out.println(testDeck);
-        System.out.println(testDeck.getSize());
-    }
-    
-    public static void verbiage(Deck deckus) {
-        System.out.println("New deck: " + deckus);
-        System.out.println("Duplicates test: " + deckus.testDuplicates());
-    }
-    
-    public static void verbiage() {
-        System.out.println("New deck: " + testDeck);
-        System.out.println("Duplicates test: " + testDeck.testDuplicates());
+        String[] hands = testDeck.deal(3); // Make a string[] with cards in it
+        for (String i : hands) {
+            System.out.println("yee: " + i);
+        }
+        /*
+         * the list will have cards like so:
+         * {Player1 card1, Player1 card2, Player2 card1, Player2 card2...}
+         */
+        
+        player1Hand.setCards(hands[0], hands[1]); //Give the player objects their cards
+        player2Hand.setCards(hands[2], hands[3]);
+        player3Hand.setCards(hands[4], hands[5]);
+        
+        System.out.println(player1Hand); // toString() of hands
+        System.out.println(player2Hand);
+        System.out.println(player3Hand);
+        
+        System.out.println(testDeck); // toString() of main deck
+        System.out.println(testDeck.getSize()); // num cards in main deck
+        System.out.println(testDeck.testDuplicates()); // Make sure there are no dupes
     }
     
 }
