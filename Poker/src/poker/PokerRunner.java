@@ -32,17 +32,20 @@ public class PokerRunner {
         System.out.print("To begin, please enter the number of players: ");
         int numPlayers = keyboard.nextInt();
         players = new ArrayList<>(numPlayers);
-        for (int a = 0; a < numPlayers; a++){
-            players.set(a, new Player());
+        players.clear();
+        for (int a = 0; a < numPlayers; a++) {
+            players.add(new Player());
         }
 
         // get names of all the players
-        System.out.println("Please enter in the first name of each player.");
-        for (int a = 0; a < players.size(); a++) {
-            System.out.print("Player " + (a + 1) + ": ");
-            String tempName = keyboard.nextLine();
-            players.get(a).setName(tempName);
+        System.out.println("Please enter in the first name of each player.\n");
+        int index = 1;
+        for (Player player : players) {
+            System.out.print("Player " + index + ": ");
+            player.setName(keyboard.next());
+            index++;
         }
+        System.out.println(players);
 
     }
 
