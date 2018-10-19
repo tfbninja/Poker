@@ -75,6 +75,8 @@ public class Deck {
         type = type.toLowerCase();
         if (type.equals("poker") || type.equals("standard") || type.equals("texas hold 'em")) {
             autoPopulate();
+        } else if (type.equals("burn") || type.equals("discard")) {
+            this.cardList = new ArrayList<>();
         }
     }
 
