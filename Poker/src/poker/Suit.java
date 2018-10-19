@@ -69,7 +69,7 @@ public class Suit {
 /*
  * The MIT License
  *
- * Copyright 2018 Tim Barber.
+ * Copyright (c) 2018 Tim Barber.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal

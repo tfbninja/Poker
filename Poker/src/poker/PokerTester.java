@@ -18,8 +18,12 @@ public class PokerTester {
     private static Player player1 = new Player(); // Make player 1
     private static Player player2 = new Player(); // Make player 2
     private static Player player3 = new Player(); // Make player 3
+    private static Pot mainPot = new Pot(0, "main");
     private static Scanner keyboard = new Scanner(System.in); // create input obj
     private static Random random = new Random();
+
+    private static int startingMoney = 2500;
+    private static int minBet = 5;
 
     public static void main(String[] args) throws Exception {
         player1.setName("Bob"); // Name player 1
@@ -32,6 +36,9 @@ public class PokerTester {
         players[1] = player2;
         players[2] = player3;
 
+        //init player's money
+        giveMoney(players);
+
         shuffleDeck(testDeck); //shuffle deck
         System.out.println("Shuffled.");
 
@@ -40,8 +47,7 @@ public class PokerTester {
         System.out.println("Little: " + players[players.length - 1].getName());
         System.out.println("Big: " + players[(players.length - 2) % players.length].getName());
 
-        offerCut(players[0]); //offer cut
-        System.out.println(testDeck);
+        offerCut(players[1]); //offer cut
 
         dealHands(testDeck, players); // deal in
         System.out.println("Players dealt in.");
@@ -49,10 +55,12 @@ public class PokerTester {
         System.out.println("\n" + player1); // toString() of players
         System.out.println(player2);
         System.out.println(player3);
+    }
 
-        System.out.println("\n" + testDeck); // toString() of main deck
-        System.out.println(testDeck.getSize()); // num cards in main deck
-        System.out.println(testDeck.testDuplicates()); // Make sure there are no dupes
+    public static void giveMoney(Player[] players) {
+        for (Player player : players) {
+            player.setMoney(startingMoney);
+        }
     }
 
     public static void offerCut(Player playerToCut) {
@@ -128,7 +136,7 @@ public class PokerTester {
 /*
  * The MIT License
  *
- * Copyright 2018 Tim Barber.
+ * Copyright (c) 2018 Tim Barber.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal

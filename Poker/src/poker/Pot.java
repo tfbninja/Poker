@@ -1,31 +1,58 @@
 package poker;
 
+import java.util.Random;
+
 /**
  *
  * @author Tim Barber
  */
+public class Pot {
 
-/*
- * Suits: ♥,♦,♣,♠
- */
-public class PokerRunner {
+    private int amount;
+    private String name;
+    private Random random = new Random();
 
-    public static void main(String[] args) throws Exception {
-        System.out.println("\nCreated by Tim Barber, October 2018\n");
-        Deck mainDeck = new Deck("Standard");
-        Deck burnPile = new Deck();
-
-        mainDeck.setDebugMode(false);
-        mainDeck.shuffle();
-
-        System.out.println("Burn deck: >" + burnPile.toOrganizedString() + "<");
-
-        System.out.println("Shuffled deck: " + mainDeck);
-        System.out.println("Duplicates test: " + mainDeck.testDuplicates());
-
+    public Pot() {
+        amount = 0;
+        String tempNum = "";
+        for (int i = 0; i < 6; i++) {
+            tempNum += String.valueOf(Math.abs(random.nextInt()) % 10);
+        }
+        name = "Pot_" + tempNum;
     }
 
+    public Pot(int amt) {
+        this.amount = amt;
+        String tempNum = "";
+        for (int i = 0; i < 6; i++) {
+            tempNum += String.valueOf(Math.abs(random.nextInt()) % 10);
+        }
+        name = "Pot_" + tempNum;
+    }
+
+    public Pot(int amt, String name) {
+        this.amount = amt;
+        this.name = name;
+    }
+
+    public int getAmount() {
+        return this.amount;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setAmount(int amt) {
+        this.amount = amt;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }
+
+
 /*
  * The MIT License
  *
