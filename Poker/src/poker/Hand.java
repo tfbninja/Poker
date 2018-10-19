@@ -98,7 +98,7 @@ public class Hand extends Deck {
             System.out.println("---Method toString()---");
             System.out.println(this.playerName + " hand: " + this.card1 + ", " + this.card2 + "\n---End of Method toString()---");
         }
-        return this.playerName + " hand: " + this.card1 + ", " + this.card2;
+        return "[" + this.playerName + "'s hand: " + this.card1 + ", " + this.card2 + "]";
 
     }
 

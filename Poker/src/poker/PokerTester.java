@@ -1,5 +1,8 @@
 package poker;
 
+import java.util.Random;
+import java.util.Scanner;
+
 /**
  *
  * @author Tim Barber
@@ -9,52 +12,118 @@ package poker;
  * Suits: ♥,♦,♣,♠
  */
 public class PokerTester {
-    
+
     private static Deck testDeck = new Deck("Standard"); // Init main deck
+    private static Player[] players;
     private static Player player1 = new Player(); // Make player 1
     private static Player player2 = new Player(); // Make player 2
     private static Player player3 = new Player(); // Make player 3
+    private static Scanner keyboard = new Scanner(System.in); // create input obj
+    private static Random random = new Random();
 
     public static void main(String[] args) throws Exception {
         player1.setName("Bob"); // Name player 1
         player2.setName("Joe"); // Name player 2
         player3.setName("Jim"); // Name player 3
-        testDeck.setDebugMode(true);
 
-        testDeck.shuffle(); // Shuffle the deck
+        players = new Player[3]; // Init player list
 
-        Hand player1Hand = new Hand(); // Init hands
-        Hand player2Hand = new Hand();
-        Hand player3Hand = new Hand();
-        player3Hand.setDebugMode(true);
-        
-        player1Hand.setPlayerName(player1.getName()); //Name the hands to their respective players
-        player2Hand.setPlayerName(player2.getName());
-        player3Hand.setPlayerName(player3.getName());
-        
+        players[0] = player1;   //give it values
+        players[1] = player2;
+        players[2] = player3;
+
+        shuffleDeck(testDeck); //shuffle deck
+        System.out.println("Shuffled.");
+
+        players = chooseButtons(players); // set button positions
+        System.out.println("Dealer: " + players[0].getName());
+        System.out.println("Little: " + players[players.length - 1].getName());
+        System.out.println("Big: " + players[(players.length - 2) % players.length].getName());
+
+        offerCut(players[0]); //offer cut
         System.out.println(testDeck);
-        String[] hands = testDeck.deal(3); // Make a string[] with cards in it
-        for (String i : hands) {
-            System.out.println("yee: " + i);
-        }
-        /*
-         * the list will have cards like so:
-         * {Player1 card1, Player1 card2, Player2 card1, Player2 card2...}
-         */
-        
-        player1Hand.setCards(hands[0], hands[1]); //Give the player objects their cards
-        player2Hand.setCards(hands[2], hands[3]);
-        player3Hand.setCards(hands[4], hands[5]);
-        
-        System.out.println(player1Hand); // toString() of hands
-        System.out.println(player2Hand);
-        System.out.println(player3Hand);
-        
-        System.out.println(testDeck); // toString() of main deck
+
+        dealHands(testDeck, players); // deal in
+        System.out.println("Players dealt in.");
+
+        System.out.println("\n" + player1); // toString() of players
+        System.out.println(player2);
+        System.out.println(player3);
+
+        System.out.println("\n" + testDeck); // toString() of main deck
         System.out.println(testDeck.getSize()); // num cards in main deck
         System.out.println(testDeck.testDuplicates()); // Make sure there are no dupes
     }
-    
+
+    public static void offerCut(Player playerToCut) {
+        int cutAmt = 0;
+        int tries = 0;
+        do {
+            if (tries < 3) {
+                System.out.print(playerToCut.getName() + ", how many cards to cut?: ");
+            } else {
+                System.out.print("I swear " + playerToCut.getName() + ", quit messing around: ");
+            }
+            cutAmt = keyboard.nextInt();
+            tries++;
+        } while (cutAmt < 0 || cutAmt > 52);
+        testDeck.cut(cutAmt);
+    }
+
+    public static void shuffleDeck(Deck deckToShuffle) {
+        int shuffles = random.nextInt(3) + 1;
+        int cuts = random.nextInt(5) + 1;
+        int overhands = random.nextInt(6) + 1;
+
+        while (shuffles > 0) {
+            deckToShuffle.shuffle();
+            shuffles--;
+        }
+        while (cuts > 0) {
+            deckToShuffle.cut(random.nextInt(51) + 1);
+            cuts--;
+        }
+        while (overhands > 0) {
+            deckToShuffle.overhandShuffle();
+            overhands--;
+        }
+    }
+
+    public static void dealHands(Deck deck, Player[] players) {
+
+        //Make a hand list as large as the number of players
+        Hand[] hands = deck.deal(players.length);
+
+        // Give each player their hand
+        int index = 0;
+        for (Player player : players) {
+            hands[index].setPlayerName(player.getName());
+            player.setCards(hands[index]);
+            index++;
+        }
+
+    }
+
+    public static Player[] chooseButtons(Player[] players) {
+        int index = random.nextInt(players.length);
+        players[index].makeDealer(true);
+        Player[] temp = new Player[players.length];
+        // Not only does this set the buttons, but it 'rotates' the
+        // player list so that the dealer is at the beginning
+        int i = 0;
+        for (Player player : players) {
+            int newIndex = i - index;
+            if (newIndex < 0) {
+                newIndex += temp.length;
+            }
+            temp[newIndex] = player;
+            i++;
+        }
+        temp[(temp.length - 1) % temp.length].makeLittle(true);
+        temp[(temp.length - 2) % temp.length].makeBig(true);
+        return temp;
+    }
+
 }
 /*
  * The MIT License

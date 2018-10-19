@@ -21,11 +21,15 @@ public class Player {
     private boolean debugMode = false;
 
     public Player() {
-        this.random = new Random(0);
+        this.random = new Random();
         this.isAllIn = false;
         this.money = 0;
         this.hand = new Hand();
-        this.name = "Player " + String.valueOf(Math.abs(random.nextInt()));
+        String tempNum = "";
+        for (int i = 0; i < 6; i++) {
+            tempNum += String.valueOf(Math.abs(random.nextInt()) % 10);
+        }
+        this.name = "Player_" + tempNum;
         this.isDealer = false;
         this.isLittle = false;
         this.isBig = false;

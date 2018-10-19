@@ -179,7 +179,9 @@ public class Deck {
 
     public void autoPopulate() {
         for (int suitnum = 0; suitnum < 4; suitnum++) {
+
             for (int ranknum = 1; ranknum <= 13; ranknum++) {
+
                 Rank tempRank = new Rank();
                 Suit tempSuit = new Suit();
                 String rankStr = tempRank.intToRank(ranknum);
@@ -199,19 +201,33 @@ public class Deck {
         return cards;
     }
 
-    public String[] deal(int numHands) {
-        String[] hands = new String[numHands * 2]; // Twice as many cards as hands
-        for (int i = 0; i <= numHands; i += 2) {
-            System.out.println(hands[i] = this.dealCardTop());
+    public Hand[] deal(int numHands) {
+        //Init hand list
+        Hand[] hands = new Hand[numHands];
+
+        //fill with empty hands
+        for (int i = 0; i < numHands; i++) {
+            Hand tempHand = new Hand();
+            hands[i] = tempHand;
         }
-        for (int i = 1; i <= numHands + 1; i += 2) {
-            System.out.println(hands[i] = this.dealCardTop());
+
+        //init hands to actual cards
+        for (int i = 0; i < numHands; i++) {
+            hands[i].setCard(1, this.dealCardTop());
         }
+        for (int i = 0; i < numHands; i++) {
+            hands[i].setCard(0, this.dealCardTop());
+        }
+
         return hands;
     }
 
     public String dealCardTop() {
         return cardList.remove(0);
+    }
+
+    public String dealCard(int indexFromTop) {
+        return cardList.remove(indexFromTop);
     }
 
     public ArrayList<String> cut(int numCards) {
@@ -224,8 +240,8 @@ public class Deck {
         if (debugMode) {
             System.out.println("Humanized number of cards to cut: " + numCards);
         }
-        if (numCards <= 0) {
-            numCards = 1; //can't cut negative cards
+        if (numCards < 0) {
+            numCards = Math.abs(numCards); //can't cut negative cards
             if (debugMode) {
                 System.out.println("Detected non-positive value, changed to " + numCards);
             }
@@ -350,7 +366,7 @@ public class Deck {
     }
 
     public void overhandShuffle() {
-        overhandShuffle(0, 8);
+        overhandShuffle(0, random.nextInt(12) + 5);
     }
 
     public void overhandShuffle(int packets) {
@@ -388,7 +404,11 @@ public class Deck {
     }
 
     public ArrayList<String> shuffle() {
-        return shuffle(0);
+        int seed = random.nextInt(99999999);
+        if (debugMode) {
+            System.out.println("---Method shuffle()---\nNo params, shuffling with seed: " + seed);
+        }
+        return shuffle(seed);
     }
 
     @Override
