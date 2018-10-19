@@ -25,7 +25,18 @@ public class PokerRunner {
     private static Random random = new Random();
 
     public static void main(String[] args) {
-        System.out.println("\nCreated by Tim Barber, October 2018\n");
+        System.out.println("\nTexas Hold 'Em Runner\nCreated by Tim Barber, October 2018\n");
+
+        // set size of players list
+        System.out.print("To begin, please enter the number of players: ");
+        players = new Player[keyboard.nextInt()];
+
+        // get names of all the players
+        System.out.println("Please enter in the first name of each player.");
+        for (int a = 0; a < players.length; a++){
+            System.out.print("Player " + a + ": ");
+            players[a].setName(keyboard.nextLine());
+        }
 
     }
 
