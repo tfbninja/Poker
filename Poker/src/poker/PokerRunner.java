@@ -1,5 +1,6 @@
 package poker;
 
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -15,7 +16,7 @@ public class PokerRunner {
 
     private static Deck mDeck = new Deck("Standard"); // Init main deck
     private static Deck bPile = new Deck("Burn"); // Init burn pile
-    private static Player[] players;
+    private static ArrayList<Player> players;
     private static Pot mainPot = new Pot(0, "main");
 
     private static int startingMoney = 2500;
@@ -29,13 +30,18 @@ public class PokerRunner {
 
         // set size of players list
         System.out.print("To begin, please enter the number of players: ");
-        players = new Player[keyboard.nextInt()];
+        int numPlayers = keyboard.nextInt();
+        players = new ArrayList<>(numPlayers);
+        for (int a = 0; a < numPlayers; a++){
+            players.set(a, new Player());
+        }
 
         // get names of all the players
         System.out.println("Please enter in the first name of each player.");
-        for (int a = 0; a < players.length; a++){
-            System.out.print("Player " + a + ": ");
-            players[a].setName(keyboard.nextLine());
+        for (int a = 0; a < players.size(); a++) {
+            System.out.print("Player " + (a + 1) + ": ");
+            String tempName = keyboard.nextLine();
+            players.get(a).setName(tempName);
         }
 
     }
