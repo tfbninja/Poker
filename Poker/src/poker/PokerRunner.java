@@ -54,7 +54,7 @@ public class PokerRunner {
 
         offerCut(players.get(players.size() - 1), mDeck); // offer cut to player right of dealer
 
-        System.out.println(mDeck);
+        //System.out.println(mDeck); // only for debugging hands and stuff
 
         dealHands(mDeck, players); // deal hands to players
         /*
