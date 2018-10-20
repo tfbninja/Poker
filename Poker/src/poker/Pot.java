@@ -50,6 +50,10 @@ public class Pot {
     public void setName(String name) {
         this.name = name;
     }
+
+    public void addMoney(int amt){
+        this.amount += amt;
+    }
 }
 
 

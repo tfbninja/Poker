@@ -25,7 +25,7 @@ public class PokerTester {
     private static int startingMoney = 2500;
     private static int minBet = 5;
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         player1.setName("Bob"); // Name player 1
         player2.setName("Joe"); // Name player 2
         player3.setName("Jim"); // Name player 3
@@ -55,6 +55,7 @@ public class PokerTester {
         System.out.println("\n" + player1); // toString() of players
         System.out.println(player2);
         System.out.println(player3);
+        System.out.println("Hello there");
     }
 
     public static void giveMoney(Player[] players) {
@@ -131,7 +132,6 @@ public class PokerTester {
         temp[(temp.length - 2) % temp.length].makeBig(true);
         return temp;
     }
-
 }
 /*
  * The MIT License

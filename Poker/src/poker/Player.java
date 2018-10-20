@@ -9,12 +9,14 @@ import java.util.Random;
 public class Player {
 
     private int money;
+    private int transientBet;
     private Hand hand;
     private String name;
     private Random random;
     private boolean isDealer;
     private boolean isLittle;
     private boolean isBig;
+    private boolean isActive;
 
     private boolean isAllIn;
 
@@ -24,6 +26,8 @@ public class Player {
         this.random = new Random();
         this.isAllIn = false;
         this.money = 0;
+        this.transientBet = 0;
+        this.isActive = true;
         this.hand = new Hand();
         String tempNum = "";
         for (int i = 0; i < 6; i++) {
@@ -42,8 +46,10 @@ public class Player {
 
     public Player(String name, int money, Hand cards) {
         this.isAllIn = false;
-        this.name = name;
+        this.name = name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
         this.money = money;
+        this.transientBet = 0;
+        this.isActive = true;
         this.hand = cards;
 
         this.isDealer = false;
@@ -55,6 +61,22 @@ public class Player {
         if (debugMode) {
             System.out.println("Player instantiated with vars, Name: " + this.name + ", Money: " + this.money + ", Cards: " + this.hand + "");
         }
+    }
+
+    public void setActive(boolean active) {
+        this.isActive = active;
+    }
+
+    public boolean getIsActive() {
+        return this.isActive;
+    }
+
+    public void setTransientBet(int amt) {
+        this.transientBet = amt;
+    }
+
+    public int getTransientBet() {
+        return this.transientBet;
     }
 
     public void setMoney(int amt) {
@@ -74,7 +96,11 @@ public class Player {
     }
 
     public void setName(String name) {
-        this.name = name;
+        if (name.length() > 1) {
+            this.name = name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
+        } else {
+            this.name = name.toUpperCase();
+        }
     }
 
     public String getName() {
@@ -115,10 +141,10 @@ public class Player {
 
     @Override
     public String toString() {
-        return this.name + ": Money: " + this.money + ", Cards: " + this.hand
+        return "<" + this.name + ": Money: " + this.money + ", Cards: " + this.hand
                 + ", is all in: " + this.isAllIn + ", is dealer: " + this.isDealer
                 + ", is little blind: " + this.isLittle + ", is big blind: "
-                + this.isBig + ".";
+                + this.isBig + ">\n";
     }
 
 }
