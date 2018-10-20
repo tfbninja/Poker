@@ -26,6 +26,15 @@ public class PokerRunner {
     private static int bigBet = 10;
 
     private static int currentBet = bigBet;
+    private static int roundStage = 1;
+    /*
+     * roundStage is just a number representing at what the point the game has
+     * progressed to. The possible stages are as follows:
+     * 1: pre-flop, action is to player right of big blind
+     * 2: post-flop, action is to little blind, or equiv.
+     * 3: post-turn, action is the same as post-flop
+     * 4: post-river action is the same as post-flop
+     */
 
     private static Scanner keyboard = new Scanner(System.in); // create input obj
     private static Random random = new Random();
@@ -194,84 +203,121 @@ public class PokerRunner {
     }
 
     public static void bettingRound() {
-        for (Player player : players) {
-            System.out.println("VALID ACTIONS: fold, raise, bet, check, and call.");
-            System.out.print(player.getName() + ", the action is to you, what is your action?: ");
-            String action = keyboard.next().toLowerCase();
+        for (Player player : getActionList()) {
+            /*
+             * This cycles turns over the action list, not the player roster,
+             * because the roster always has the dealer at the beginning, but
+             * the action order depends on what stage of betting the game has
+             * progressed to.
+             */
+            System.out.println("\n"); // aesthetic is key
 
-            // perform action
-            switch (action) {
-                case "fold":
-                    mainPot.addMoney(player.getTransientBet());
-                    player.setActive(false);
-                    break;
-                case "raise":
-                    int proposedRaise = 0; // init the var to hold the raise
+            boolean turnIsOver = false;
 
-                    while (proposedRaise < bigBet) { // as long is the raise is not legitimate, keep asking for it
-                        System.out.print("What do you want to raise to?: ");
-                        proposedRaise = keyboard.nextInt(); // set to input
+            while (!turnIsOver) { // try to perform action
 
-                        if (proposedRaise > player.getMoney()) { // if they tried to raise more than they have
-                            player.goAllIn(); // they automatically are put all in
-                            currentBet = player.getMoney();
-
-                        } else if (proposedRaise < (currentBet + bigBet)) { // if they tried to raise less than the min bet
-                            System.out.println("That is too small, the minimum bet at this time is " + bigBet); // restart the loop
-
-                        } else { // it must have been a legitimate raise amt
-                            player.setTransientBet(proposedRaise); // update the player
-                            currentBet = proposedRaise; // update the running bet amt
+                System.out.println("VALID ACTIONS: fold, raise, bet, check, and call.");
+                System.out.print(player.getName() + ", the action is to you, what is your action?: ");
+                String action = keyboard.next().toLowerCase();
+                switch (action) {
+                    case "fold":
+                        mainPot.addMoney(player.getTransientBet());
+                        player.setActive(false);
+                        turnIsOver = true;
+                        break;
+                    case "raise":
+                        boolean stringBet = false;
+                        if (currentBet > 0) {
+                            System.out.println("REEEE NO STRING BETS " + player.getName() + "!!!");
+                            stringBet = true;
                         }
-                    }
-                    break;
-                case "bet":
-                    int proposedBet = 0; // init the var to hold the bet
+                        if (!stringBet) {
+                            int proposedRaise = 0; // init the var to hold the raise
 
-                    while (proposedBet < bigBet) { // as long as the bet is not legitimate, keep asking for it
+                            while (proposedRaise < bigBet) { // as long is the raise is not legitimate, keep asking for it
+                                System.out.print("What do you want to raise to?: ");
+                                proposedRaise = keyboard.nextInt(); // set to input
 
-                        System.out.print("What amount would you like to bet?: ");
-                        proposedBet = keyboard.nextInt(); // set to input
+                                if (proposedRaise > player.getMoney()) { // if they tried to raise more than they have
+                                    System.out.println("You don't have " + proposedRaise + ", you have " + player.getMoney() + ". You are all-in.");
+                                    player.goAllIn(); // they automatically are put all in
+                                    currentBet = player.getMoney();
 
-                        if (proposedBet > player.getMoney()) { // if they tried to bet more than they have,
-                            player.goAllIn(); // they automatically are all in
+                                } else if (proposedRaise < (currentBet + bigBet)) { // if they tried to raise less than the min bet
+                                    System.out.println("That is too small, the minimum bet at this time is " + bigBet); // restart the loop
 
-                        } else if (proposedBet < bigBet) { // if they tried to bet less than the minimum bet
-                            System.out.println("That is too small, the minimum bet at this time is " + bigBet); // tell them and restart the loop
-
-                        } else { // it must have been a legitimate bet
-                            player.setTransientBet(proposedBet); // update the player
-                            currentBet = proposedBet; // update the running bet amt
+                                } else { // it must have been a legitimate raise amt
+                                    player.setTransientBet(proposedRaise); // update the player
+                                    currentBet = proposedRaise; // update the running bet amt
+                                }
+                            }
+                            turnIsOver = true;
+                            break;
                         }
-                    }
-                    break;
-                case "check":
-                    /*
-                     * ACTION ITEM: need to add a while loop encompasing this
-                     * entire switch statement, making sure nobody tries to
-                     * check a bet
-                     */
+                    case "call": // notice this is right after raise, this is to make string bets easier to handle
+                        if (player.getMoney() <= currentBet) { // the player cannot properly call, therefore
+                            player.goAllIn(); // they have to go all in
+                            // or they have just the right amount of money, with the same net effect
 
-                    // this needs to change
-                    if (currentBet > 0) {
-                        System.out.println("You cannot check a bet, you must either call, raise, or fold");
-                    }
-                    // end this
-                    break;
+                        } else { // they must have enough money to call
+                            player.setTransientBet(currentBet); // update player
 
-                case "call":
-                    if (player.getMoney() <= currentBet) { // the player cannot properly call, therefore
-                        player.goAllIn(); // they have to go all in
-                        // or they have just the right amount of money, with the same net effect
+                            turnIsOver = true;
+                            break; // we're done here xD
+                        }
+                    case "bet":
+                        int proposedBet = 0; // init the var to hold the bet
 
-                    } else { // they must have enough money to call
-                        player.setTransientBet(currentBet); // update player
-                        break; // we're done here xD
-                    }
-                default:
-                    System.out.println("Invalid action \"" + action + "\"");
+                        while (proposedBet < bigBet) { // as long as the bet is not legitimate, keep asking for it
+
+                            System.out.print("What amount would you like to bet?: ");
+                            proposedBet = keyboard.nextInt(); // set to input
+
+                            if (proposedBet > player.getMoney()) { // if they tried to bet more than they have,
+                                player.goAllIn(); // they automatically are all in
+
+                            } else if (proposedBet < bigBet) { // if they tried to bet less than the minimum bet
+                                System.out.println("That is too small, the minimum bet at this time is " + bigBet); // tell them and restart the loop
+
+                            } else { // it must have been a legitimate bet
+                                player.setTransientBet(proposedBet); // update the player
+                                currentBet = proposedBet; // update the running bet amt
+                            }
+                        }
+                        turnIsOver = true;
+                        break;
+                    case "check":
+                        /*
+                         * ACTION ITEM: need to add a while loop encompasing
+                         * this entire switch statement, making sure nobody
+                         * tries to check a bet
+                         */
+
+                        // this right here needs to change
+                        if (currentBet > 0) {
+                            System.out.println("You cannot check a bet, you must either call, raise, or fold");
+                        }
+                        // turn into a while loop encompassing entire switch stmt ^
+
+                        turnIsOver = true;
+                        break;
+
+                    default:
+                        System.out.println("Invalid action \"" + action + "\"");
+                }
             }
         }
+    }
+
+    public static ArrayList<Player> getActionList() {
+        ArrayList<Player> actionList = players;
+        if (roundStage == 1) { // action goes to first active player to the left of big blind
+            Collections.reverse(actionList);
+            Collections.rotate(actionList, -2);
+        } else { // it is past the flop, action goes to little blind, or next active player to the left of the little if the little folded
+            Collections.reverse(actionList);
+        }
+        return actionList;
     }
 
 }
