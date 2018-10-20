@@ -71,6 +71,10 @@ public class Deck {
         cardList.addAll(Arrays.asList(cards));
     }
 
+    public boolean isEmpty() {
+        return this.cardList.isEmpty();
+    }
+
     public void setType(String type) {
         type = type.toLowerCase();
         if (type.equals("poker") || type.equals("standard") || type.equals("texas hold 'em")) {
