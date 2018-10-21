@@ -18,6 +18,8 @@ public class Player {
     private boolean isBig;
     private boolean isActive;
 
+    private int sidePot;
+
     private boolean isAllIn;
 
     private boolean debugMode = false;
@@ -29,6 +31,7 @@ public class Player {
         this.transientBet = 0;
         this.isActive = true;
         this.hand = new Hand();
+        this.sidePot = 0;
         String tempNum = "";
         for (int i = 0; i < 6; i++) {
             tempNum += String.valueOf(Math.abs(random.nextInt()) % 10);
@@ -51,6 +54,7 @@ public class Player {
         this.transientBet = 0;
         this.isActive = true;
         this.hand = cards;
+        this.sidePot = 0;
 
         this.isDealer = false;
         this.isLittle = false;
@@ -71,6 +75,18 @@ public class Player {
         return this.isActive;
     }
 
+    public void setSidePot(int amt) {
+        this.sidePot = amt;
+    }
+
+    public int getSidePot() {
+        return this.sidePot;
+    }
+
+    public void addSidePot(int amt) {
+        this.sidePot += amt;
+    }
+
     public void setTransientBet(int amt) {
         this.transientBet = amt;
     }
@@ -85,6 +101,10 @@ public class Player {
 
     public int getMoney() {
         return this.money;
+    }
+
+    public void addMoney(int amt) {
+        this.money += amt;
     }
 
     public Hand getCards() {
@@ -136,6 +156,7 @@ public class Player {
             return "Invalid, already all in.";
         }
         this.isAllIn = true;
+        this.sidePot = this.money; // set the side pot to their money
         return "Successfull";
     }
 
