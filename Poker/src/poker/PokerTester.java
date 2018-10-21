@@ -26,9 +26,9 @@ public class PokerTester {
     private static int minBet = 5;
 
     public static void main(String[] args) {
-        Card[] testcards = {CardMethods.TWOOFDIAMONDS, CardMethods.TWOOFHEARTS, CardMethods.TWOOFCLUBS, CardMethods.SEVENOFDIAMONDS, CardMethods.KINGOFHEARTS, CardMethods.THREEOFHEARTS, CardMethods.TWOOFSPADES};
+        Card[] testcards = {CardMethods.THREEOFCLUBS, CardMethods.THREEOFHEARTS, CardMethods.THREEOFSPADES, CardMethods.QUEENOFCLUBS, CardMethods.KINGOFHEARTS, CardMethods.QUEENOFDIAMONDS, CardMethods.TWOOFSPADES};
         Deck testdeck = new Deck(testcards);
-        System.out.println("Three of a kind of " + testdeck + ": " + CardMethods.isThreeOfAKind(testdeck));
+        System.out.println("Full house of " + testdeck + ": " + CardMethods.isFullHouse(testdeck));
     }
 
     public static void giveMoney(Player[] players) {

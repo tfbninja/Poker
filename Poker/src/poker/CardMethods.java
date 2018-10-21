@@ -217,6 +217,36 @@ public final class CardMethods {
 
     }
 
+    public static boolean isTwoPair(Deck deck) { // deck should be size 7
+        String tempDeck = deck.toString(); // string representation of deck
+
+        for (String rankA : RANKS) { // for every single rank,
+            int countA = countOccurences(tempDeck, rankA); // count how many cards have that rank in the deck
+            for (String rankB : RANKS) { // and for every single rank
+                int countB = countOccurences(tempDeck, rankB); // count up those cards
+                if ((!rankA.equals(rankB)) && countA >= 2 && countB >= 2) {
+                    // and if the ranks are different and the rank counts for A and B are both above 2,
+                    return true; // we have a two pair
+                }
+            }
+        }
+        return false; // we didn't find two distinct pairs, therefore false
+    }
+
+    public static boolean isPair(Deck deck) {
+        String tempDeck = deck.toString();
+
+        for (String rank : RANKS) {
+            int count = countOccurences(tempDeck, rank);
+            {
+                if (count >= 2) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public static int countOccurences(String str, char chr) {
         String chrStr = String.valueOf(chr); // turn chr into a string to allow the algorithm to work
 
