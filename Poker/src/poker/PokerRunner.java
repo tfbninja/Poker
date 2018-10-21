@@ -415,11 +415,13 @@ public class PokerRunner {
          * using the best possible cards from each player's 2 hole cards and the
          * 5 community cards.
          */
-
-        ArrayList<Player> winners = bestHand(finalists); // this is a list because there might be a tie
+        ArrayList<Player> winners = new ArrayList<Player>(); // this is a list because there might be a tie
+        for (Player player : bestHand(finalists)) {
+            winners.add(player);
+        }
     }
 
-    public static ArrayList<Player> bestHand(ArrayList<Player> contestants){
+    public static Player[] bestHand(ArrayList<Player> contestants) {
         /*
          * Winning hands from best to worst:
          * Royal Flush, t-a suited
@@ -428,39 +430,70 @@ public class PokerRunner {
          * Full House, 3pair and 2pair
          * Flush, any 5 cards suited
          * Straight, 5 consecutive
-         * Three of a kind,  3 cards equally ranked
+         * Three of a kind, 3 cards equally ranked
          * Two pair, 2pair and 2pair
          * One pair, 2pair
          * High card, highest card out of all other hands
          */
 
-        ArrayList<Hand> hands = new ArrayList<>();
-        for (Player player : contestants){
-            hands.add(player.getCards());
+        ArrayList<Hand> hands = new ArrayList<>(); // list of hands
+        for (Player player : contestants) {
+            hands.add(player.getCards()); // fill that list
+            hands.get(hands.size() - 1).setPlayerName(player.getName());
         }
-        for (int index = 0; index < hands.size(); index++){
 
+        for (int index = 0; index < hands.size() - 1; index++) {
+            if (getIntHandRank(hands.get(index)) < getIntHandRank(hands.get(index))) {
+                hands.remove(index);
+            } else if (getIntHandRank(hands.get(index)) < getIntHandRank(hands.get(index))) {
+                hands.remove(index + 1);
+            }
         }
+        if (hands.size() == 1) {
+
+            String tempName = hands.get(0).getPlayerName(); // the winning players' name
+            ArrayList<String> playerNames = new ArrayList<>(); // list of player names
+            for (int i = 0; i < playerNames.size(); i++) { // populate the list
+                playerNames.add(players.get(i).getName());
+            }
+
+            Player[] tempPlayerList = new Player[1]; // list of size 1 that holds the actual player object that won
+            tempPlayerList[0] = players.get(playerNames.indexOf(tempName)); // populate it
+
+            return tempPlayerList; // return it
+        }
+
+        /*
+         * ACTION ITEM:
+         * This is unfinished. There needs to be a while loop holding the for
+         * loop that checks comparative hands. The while loop should run while
+         * the previous length of the hands list is bigger than the actual size
+         * (basically as long as the for loop is being productive)
+         * once the while loop is done, convert the hands to a Player[] and
+         * return it.
+         */
+        Player[] tempPlayerList = new Player[hands.size()];
+        return tempPlayerList;
     }
 
-    public static int getIntHandRank(Deck deck){
-        if (CardMethods.isRoyalFlush(deck)){
+    public static int getIntHandRank(Deck deck) {
+        if (CardMethods.isRoyalFlush(deck)) {
             return 10;
-        } else if (CardMethods.isStraightFlush(deck)){
+        } else if (CardMethods.isStraightFlush(deck)) {
             return 9;
-        } else if (CardMethods.isFourOfAKind(deck)){
+        } else if (CardMethods.isFourOfAKind(deck)) {
             return 8;
-        } else if (CardMethods.isFullHouse(deck)){
+        } else if (CardMethods.isFullHouse(deck)) {
             return 7;
-        } else if (CardMethods.isFlush(deck)){
+        } else if (CardMethods.isFlush(deck)) {
             return 6;
-        } else if (CardMethods.isStraight(deck)){
+        } else if (CardMethods.isStraight(deck)) {
             return 5;
-        } else if (CardMethods.isThreeOfAKind(deck)){
+        } else if (CardMethods.isThreeOfAKind(deck)) {
             return 4;
-        } else if (CardMethods.isTwoPair(deck)){
+        } else if (CardMethods.isTwoPair(deck)) {
             return 3;
-        } else if (CardMethods.isPair(deck)){
+        } else if (CardMethods.isPair(deck)) {
             return 2;
         } else {
             return 1;

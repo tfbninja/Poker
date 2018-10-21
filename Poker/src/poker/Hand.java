@@ -48,6 +48,10 @@ public class Hand extends Deck {
         this.playerName = name;
     }
 
+    public String getPlayerName() {
+        return this.playerName;
+    }
+
     public void setCards(ArrayList<String> cards) {
         this.card1 = cards.get(0);
         this.card2 = cards.get(1);
