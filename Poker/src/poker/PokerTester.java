@@ -26,9 +26,9 @@ public class PokerTester {
     private static int minBet = 5;
 
     public static void main(String[] args) {
-        Card[] flushcards = {CardMethods.TWOOFDIAMONDS, CardMethods.TWOOFHEARTS, CardMethods.SEVENOFCLUBS, CardMethods.FOUROFCLUBS, CardMethods.FIVEOFCLUBS, CardMethods.THREEOFHEARTS, CardMethods.KINGOFCLUBS};
-        Deck flushdeck = new Deck(flushcards);
-        System.out.println("Flush of " + flushdeck + ": " + CardMethods.isFlush(flushdeck));
+        Card[] testcards = {CardMethods.TWOOFDIAMONDS, CardMethods.TWOOFHEARTS, CardMethods.TWOOFCLUBS, CardMethods.SEVENOFDIAMONDS, CardMethods.KINGOFHEARTS, CardMethods.THREEOFHEARTS, CardMethods.TWOOFSPADES};
+        Deck testdeck = new Deck(testcards);
+        System.out.println("Three of a kind of " + testdeck + ": " + CardMethods.isThreeOfAKind(testdeck));
     }
 
     public static void giveMoney(Player[] players) {
