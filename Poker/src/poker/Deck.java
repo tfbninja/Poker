@@ -50,6 +50,18 @@ public class Deck {
         perfectionOffset = 0;
     }
 
+    public Deck(Card[] cards) {
+        this.debugMode = false;
+        String[] temp = new String[cards.length];
+        int index = 0;
+        for (Card card : cards) {
+            temp[index] = card.toString();
+            index++;
+        }
+        setCards(temp);
+        perfectionOffset = 0;
+    }
+
     public Deck(ArrayList<Card> cards) {
         this.debugMode = false;
         this.setTypeCards(cards);
@@ -196,6 +208,37 @@ public class Deck {
                 this.cardList.add(tempCard.toString());
             }
         }
+    }
+
+    public boolean contains(Card card) {
+        return cardList.contains(card.toString());
+    }
+
+    public boolean contains(Deck deck) {
+        for (String card : deck.toArrayList()) {
+            if (!cardList.contains(card)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean contains(String rank) {
+        for (String card : cardList) {
+            if (card.substring(0, 1).equals(rank)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean containsSuit(char suit) { // requires one of these: ♥,♦,♣,♠
+        for (String tempSuit : cardList) {
+            if (tempSuit.charAt(1) == suit) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public String[] takeCardsTop(int amt) {

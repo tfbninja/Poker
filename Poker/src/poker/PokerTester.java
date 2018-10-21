@@ -26,36 +26,9 @@ public class PokerTester {
     private static int minBet = 5;
 
     public static void main(String[] args) {
-        player1.setName("Bob"); // Name player 1
-        player2.setName("Joe"); // Name player 2
-        player3.setName("Jim"); // Name player 3
-
-        players = new Player[3]; // Init player list
-
-        players[0] = player1;   //give it values
-        players[1] = player2;
-        players[2] = player3;
-
-        //init player's money
-        giveMoney(players);
-
-        shuffleDeck(testDeck); //shuffle deck
-        System.out.println("Shuffled.");
-
-        players = chooseButtons(players); // set button positions
-        System.out.println("Dealer: " + players[0].getName());
-        System.out.println("Little: " + players[players.length - 1].getName());
-        System.out.println("Big: " + players[(players.length - 2) % players.length].getName());
-
-        offerCut(players[1]); //offer cut
-
-        dealHands(testDeck, players); // deal in
-        System.out.println("Players dealt in.");
-
-        System.out.println("\n" + player1); // toString() of players
-        System.out.println(player2);
-        System.out.println(player3);
-        System.out.println("Hello there");
+        Card[] flushcards = {CardMethods.TWOOFDIAMONDS, CardMethods.TWOOFHEARTS, CardMethods.SEVENOFCLUBS, CardMethods.FOUROFCLUBS, CardMethods.FIVEOFCLUBS, CardMethods.THREEOFHEARTS, CardMethods.KINGOFCLUBS};
+        Deck flushdeck = new Deck(flushcards);
+        System.out.println("Flush of " + flushdeck + ": " + CardMethods.isFlush(flushdeck));
     }
 
     public static void giveMoney(Player[] players) {

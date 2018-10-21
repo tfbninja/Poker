@@ -4,7 +4,7 @@ package poker;
  *
  * @author Tim Barber
  */
-public final class CardList {
+public final class CardMethods {
 
     public static final Card ACEOFHEARTS = new Card("A", "♥");
     public static final Card TWOOFHEARTS = new Card("2", "♥");
@@ -58,6 +58,78 @@ public final class CardList {
     public static final Card JACKOFSPADES = new Card("J", "♠");
     public static final Card QUEENOFSPADES = new Card("Q", "♠");
     public static final Card KINGOFSPADES = new Card("K", "♠");
+
+    public static boolean isRoyalFlush(Deck deck) { // deck should be size 7
+        return (deck.contains(TENOFHEARTS)
+                && deck.contains(JACKOFHEARTS)
+                && deck.contains(QUEENOFHEARTS)
+                && deck.contains(KINGOFHEARTS)
+                && deck.contains(ACEOFHEARTS))
+                || (deck.contains(TENOFDIAMONDS)
+                && deck.contains(JACKOFDIAMONDS)
+                && deck.contains(QUEENOFDIAMONDS)
+                && deck.contains(KINGOFDIAMONDS)
+                && deck.contains(ACEOFDIAMONDS))
+                || (deck.contains(TENOFCLUBS)
+                && deck.contains(JACKOFCLUBS)
+                && deck.contains(QUEENOFCLUBS)
+                && deck.contains(KINGOFCLUBS)
+                && deck.contains(ACEOFCLUBS))
+                || (deck.contains(TENOFSPADES)
+                && deck.contains(JACKOFSPADES)
+                && deck.contains(QUEENOFSPADES)
+                && deck.contains(KINGOFSPADES)
+                && deck.contains(ACEOFSPADES));
+    }
+
+    public static boolean isStraightFlush(Deck deck) { // deck should be size 7
+        return isStraight(deck) && isFlush(deck);
+    }
+
+    public static boolean isStraight(Deck deck) { // deck should be size 7
+
+        for (int tempRank = 1; tempRank <= 10; tempRank++) {
+            boolean tempbool = true;
+            for (int adder = 0; adder < 5; adder++) {
+                int newnum = tempRank + adder;
+                String replacement;
+                if (newnum == 10) {
+                    replacement = "t";
+                } else if (newnum == 1 || newnum == 14) {
+                    replacement = "a";
+                } else if (newnum == 11) {
+                    replacement = "j";
+                } else if (newnum == 12) {
+                    replacement = "q";
+                } else if (newnum == 13) {
+                    replacement = "k";
+                } else {
+                    replacement = String.valueOf(newnum);
+                }
+                //System.out.println(newnum + " " + replacement + " " + deck.contains(replacement)); // debug
+                tempbool = tempbool && deck.contains(replacement);
+            }
+            if (tempbool == true) {
+                return tempbool;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isFlush(Deck deck) { // deck should be size 7
+
+        String tempDeck = deck.toString();
+
+        String[] suits = {"♥", "♦", "♣", "♠"};
+        for (String tempChar : suits) {
+            int count = tempDeck.length() - tempDeck.replace(".", "").length();
+            System.out.println(count);
+            if (count >= 5) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
 
 

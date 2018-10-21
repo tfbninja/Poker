@@ -52,27 +52,7 @@ public class PokerRunner {
 
         chooseButtons(); // set dealer, little, and big blinds
 
-        declareButtons();
-
-        shuffleDeck(mDeck); // shuffle the deck
-
-        offerCut(players.get(players.size() - 1), mDeck); // offer cut to player right of dealer
-
-        dealHands(mDeck, players); // deal hands to players
-
-        bettingRound();
-
-        flop();
-
-        bettingRound();
-
-        turn();
-
-        bettingRound();
-
-        river();
-
-        bettingRound();
+        round();
     }
 
     public static void setupGame() {
@@ -398,6 +378,124 @@ public class PokerRunner {
                 System.out.println(player.getName());
             }
         }
+    }
+
+    public static void showdown() {
+
+        System.out.println("Reveal your cards if you want to win.");
+
+        ArrayList<Player> finalists = new ArrayList<>(); // list of hands that have been revealed
+
+        for (Player player : players) { // ask every player if they want to reveal
+
+            boolean invalidResponse = true; // start by assuming their response is invalid
+            while (invalidResponse) {
+
+                System.out.print("Do you want to reveal your cards? (y/n): "); // prompt
+                String response = keyboard.next().toLowerCase(); // get their input
+
+                if (response.equals("y") || response.equals("yes") || response.contains("yes") || response.equals("yeet")) { // if yes,
+                    finalists.add(player); // add them to the list of finalists
+                    invalidResponse = false; // and continue with the next player
+
+                } else if (response.equals("n") || response.equals("no") || response.contains("no") || response.equals("yeetn't")) { // if not, that constitutes a fold
+                    System.out.println("You folded your cards."); // alert
+                    invalidResponse = false; // continue with the next player
+                    player.setActive(false); // fold
+
+                } else { // they entered in something else
+                    System.out.println("Invalid response \"" + response + "\"");
+                    //restart the while loop until they choose
+                }
+            }
+        }
+
+        /*
+         * After figuring out the contesting hands, figure out the best one
+         * using the best possible cards from each player's 2 hole cards and the
+         * 5 community cards.
+         */
+
+        ArrayList<Player> winners = bestHand(finalists); // this is a list because there might be a tie
+    }
+
+    public static ArrayList<Player> bestHand(ArrayList<Player> contestants){
+        /*
+         * Winning hands from best to worst:
+         * Royal Flush, t-a suited
+         * Straight Flush, 5 consecutive suited
+         * Four of a kind, 4 cards equally ranked
+         * Full House, 3pair and 2pair
+         * Flush, any 5 cards suited
+         * Straight, 5 consecutive
+         * Three of a kind,  3 cards equally ranked
+         * Two pair, 2pair and 2pair
+         * One pair, 2pair
+         * High card, highest card out of all other hands
+         */
+
+        ArrayList<Hand> hands = new ArrayList<>();
+        for (Player player : contestants){
+            hands.add(player.getCards());
+        }
+        for (int index = 0; index < hands.size(); index++){
+
+        }
+    }
+
+    public static int getIntHandRank(Deck deck){
+        if (CardMethods.isRoyalFlush(deck)){
+            return 10;
+        } else if (CardMethods.isStraightFlush(deck)){
+            return 9;
+        } else if (CardMethods.isFourOfAKind(deck)){
+            return 8;
+        } else if (CardMethods.isFullHouse(deck)){
+            return 7;
+        } else if (CardMethods.isFlush(deck)){
+            return 6;
+        } else if (CardMethods.isStraight(deck)){
+            return 5;
+        } else if (CardMethods.isThreeOfAKind(deck)){
+            return 4;
+        } else if (CardMethods.isTwoPair(deck)){
+            return 3;
+        } else if (CardMethods.isPair(deck)){
+            return 2;
+        } else {
+            return 1;
+        }
+    }
+
+    public static void round() {
+        for (Player player : players) {
+            player.setActive(true);
+        }
+
+        declareButtons();
+
+        shuffleDeck(mDeck); // shuffle the deck
+
+        offerCut(players.get(players.size() - 1), mDeck); // offer cut to player right of dealer
+
+        dealHands(mDeck, players); // deal hands to players
+
+        bettingRound(); // bet
+
+        flop(); // first 3 community cards
+
+        bettingRound(); // bet
+
+        turn(); // 4th community card
+
+        bettingRound(); // bet
+
+        river(); // 5th community card
+
+        bettingRound(); // final bet
+
+        showdown();
+
     }
 
 }
