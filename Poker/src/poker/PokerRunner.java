@@ -43,6 +43,7 @@ public class PokerRunner {
     private static Random random = new Random();
 
     private static String[] validActions = new String[5];
+    private static ArrayList<Player> winners = new ArrayList<>();
 
     public static void main(String[] args) {
         System.out.println("\nTexas Hold 'Em Runner\nCreated by Tim Barber, October 2018\n");
@@ -65,8 +66,11 @@ public class PokerRunner {
         validActions[4] = "call";
 
         // set size of players list
-        System.out.print("To begin, please enter the number of players: ");
-        int numPlayers = keyboard.nextInt();
+        int numPlayers = 0;
+        while (numPlayers < 2 || numPlayers > 10) {
+            System.out.print("To begin, please enter the number of players: ");
+            numPlayers = keyboard.nextInt();
+        }
         players = new ArrayList<>(numPlayers);
         players.clear(); // probably not necessary...
         for (int a = 0; a < numPlayers; a++) {
@@ -238,6 +242,9 @@ public class PokerRunner {
                                 System.out.println("Successfully folded, sacrificing $" + player.getTransientBet() + " in the process.");
                                 if (currentBet == 0) {
                                     System.out.println("You could have stayed in for free...");
+                                }
+                                if (getActivePlayers() == 1) {
+                                    showdown();
                                 }
                                 break;
                             case "raise":
@@ -411,44 +418,52 @@ public class PokerRunner {
 
     public static void showdown() {
 
-        System.out.println("Reveal your cards if you want to win.");
+        if (getActivePlayers() > 1) {
 
-        ArrayList<Player> finalists = new ArrayList<>(); // list of hands that have been revealed
+            System.out.println("Reveal your cards if you want to win.");
 
-        for (Player player : players) { // ask every player if they want to reveal
+            ArrayList<Player> finalists = new ArrayList<>(); // list of hands that have been revealed
 
-            boolean invalidResponse = true; // start by assuming their response is invalid
-            while (invalidResponse) {
+            for (Player player : players) { // ask every player if they want to reveal
 
-                System.out.print("Do you want to reveal your cards? (y/n): "); // prompt
-                String response = keyboard.next().toLowerCase(); // get their input
+                boolean invalidResponse = true; // start by assuming their response is invalid
+                while (invalidResponse) {
 
-                if (response.equals("y") || response.equals("yes") || response.contains("yes") || response.equals("yeet")) { // if yes,
-                    finalists.add(player); // add them to the list of finalists
-                    invalidResponse = false; // and continue with the next player
+                    System.out.print("Do you want to reveal your cards? (y/n): "); // prompt
+                    String response = keyboard.next().toLowerCase(); // get their input
 
-                } else if (response.equals("n") || response.equals("no") || response.contains("no") || response.equals("yeetn't")) { // if not, that constitutes a fold
-                    System.out.println("You folded your cards."); // alert
-                    invalidResponse = false; // continue with the next player
-                    player.setActive(false); // fold
+                    if (response.equals("y") || response.equals("yes") || response.contains("yes") || response.equals("yeet")) { // if yes,
+                        finalists.add(player); // add them to the list of finalists
+                        invalidResponse = false; // and continue with the next player
 
-                } else { // they entered in something else
-                    System.out.println("Invalid response \"" + response + "\"");
-                    //restart the while loop until they choose
+                    } else if (response.equals("n") || response.equals("no") || response.contains("no") || response.equals("yeetn't")) { // if not, that constitutes a fold
+                        System.out.println("You folded your cards."); // alert
+                        invalidResponse = false; // continue with the next player
+                        player.setActive(false); // fold
+
+                    } else { // they entered in something else
+                        System.out.println("Invalid response \"" + response + "\"");
+                        //restart the while loop until they choose
+                    }
                 }
             }
-        }
 
-        /*
+
+            /*
          * After figuring out the contesting hands, figure out the best one
          * using the best possible cards from each player's 2 hole cards and the
          * 5 community cards.
-         */
-        ArrayList<Player> winners = new ArrayList<Player>(); // this is a list because there might be a tie
-        for (Player player : bestHand(finalists)) {
-            winners.add(player);
+             */
+            for (Player player : bestHand(finalists)) {
+                winners.add(player);
+            }
+        } else {
+            for (Player player1 : players) {
+                if (player1.getIsActive()) {
+                    winners.add(player1);
+                }
+            }
         }
-
         int payout = mainPot.getAmount() / winners.size();
         if (mainPot.getAmount() / (double) winners.size() != payout) { // if not easily divisible
             payout += 1; // just round up
@@ -466,10 +481,10 @@ public class PokerRunner {
         for (Player sideplayer : winners) {
             totalSidePot += sideplayer.getSidePot(); // calculate side pot
         }
-        if (totalSidePot % numSidePlayers > 0) {
+        if (numSidePlayers > 0 && totalSidePot % numSidePlayers > 0) {
             int sidepayout = totalSidePot / numSidePlayers;
             sidepayout += 1;
-        } else {
+        } else if (numSidePlayers > 0) {
             int sidepayout = totalSidePot / numSidePlayers;
         }
 
@@ -652,6 +667,16 @@ public class PokerRunner {
         System.out.println(player.getName() + "'s cards: " + player.getCards() + "\nType 'hide' and then press enter to hide cards");
         keyboard.next();
         ghettoClear();
+    }
+
+    public static int getActivePlayers() {
+        int numActive = 0;
+        for (Player player : players) {
+            if (player.getIsActive()) {
+                numActive++;
+            }
+        }
+        return numActive;
     }
 
 }
