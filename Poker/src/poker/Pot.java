@@ -9,10 +9,12 @@ import java.util.Random;
 public class Pot {
 
     private int amount;
+    private int baseValue;
     private String name;
     private Random random = new Random();
 
     public Pot() {
+        baseValue = 0;
         amount = 0;
         String tempNum = "";
         for (int i = 0; i < 6; i++) {
@@ -22,6 +24,7 @@ public class Pot {
     }
 
     public Pot(int amt) {
+        this.baseValue = amt;
         this.amount = amt;
         String tempNum = "";
         for (int i = 0; i < 6; i++) {
@@ -31,8 +34,17 @@ public class Pot {
     }
 
     public Pot(int amt, String name) {
+        this.baseValue = amt;
         this.amount = amt;
         this.name = name;
+    }
+
+    public int getBaseValue() {
+        return this.baseValue;
+    }
+
+    public void setBaseValue(int amt) {
+        this.baseValue = amt;
     }
 
     public int getAmount() {
@@ -51,7 +63,7 @@ public class Pot {
         this.name = name;
     }
 
-    public void addMoney(int amt){
+    public void addMoney(int amt) {
         this.amount += amt;
     }
 }

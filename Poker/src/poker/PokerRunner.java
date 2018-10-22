@@ -20,6 +20,7 @@ public class PokerRunner {
     private static Deck bPile = new Deck("Burn"); // Init burn pile
     private static ArrayList<Player> players;
     private static Pot mainPot = new Pot(0, "main");
+    private static ArrayList<Pot> pots = new ArrayList<>();
 
     private static int startingMoney = 2500;
     private static int littleBet = 5;
@@ -194,18 +195,15 @@ public class PokerRunner {
 
         while (!resolved) {
             for (Player player : getActionList()) {
-                if (player.getIsActive()) {
-                    /*
-                     * This cycles turns over the action list, not the player
-                     * roster,
-                     * because the roster always has the dealer at the
-                     * beginning,
-                     * but
-                     * the action order depends on what stage of betting the
-                     * game
-                     * has
-                     * progressed to.
-                     */
+                /*
+                 * This cycles turns over the action list, not the player
+                 * roster, because the roster always has the dealer at the
+                 * beginning but the action order depends on what stage of
+                 * betting the game has progressed to.
+                 */
+
+                if (player.getIsActive()) { // we're not dealing with folded players
+
                     System.out.println("\n"); // aesthetic is key
 
                     boolean turnIsOver = false;
@@ -226,9 +224,9 @@ public class PokerRunner {
                         switch (action) {
                             case "view":
                                 System.out.println("Press enter to display your cards, and press enter again to hide them...");
-                                keyboard.next();
+                                keyboard.nextLine();
                                 System.out.println(player.getName() + "'s cards: " + player.getCards() + "\nPress enter to hide cards");
-                                keyboard.next();
+                                keyboard.nextLine();
                                 ghettoClear();
                                 break;
                             case "fold":
@@ -478,7 +476,9 @@ public class PokerRunner {
          * only pay equal to side pot
          */
         for (Player sideplayer : winners) {
-            sideplayer.addMoney(payout);
+            if (sideplayer.getSidePot()) {
+                sideplayer.addMoney(payout);
+            }
         }
 
     }
