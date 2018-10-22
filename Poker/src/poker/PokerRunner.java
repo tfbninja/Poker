@@ -609,15 +609,28 @@ public class PokerRunner {
 
         dealHands(mDeck, players); // deal hands to players
 
+        /*
+         * ACTION ITEM
+         * Add method for showing players their hands
+         * before the betting round begins
+         */
+        checkPlayerList();
+
         bettingRound(); // bet
+
+        checkPlayerList();
 
         flop(); // first 3 community cards
 
         bettingRound(); // bet
 
+        checkPlayerList();
+
         turn(); // 4th community card
 
         bettingRound(); // bet
+
+        checkPlayerList();
 
         river(); // 5th community card
 
@@ -625,6 +638,20 @@ public class PokerRunner {
 
         showdown();
 
+    }
+
+    public static void checkPlayerList() {
+        if (players.size() == 1) {
+            showdown();
+        }
+    }
+
+    public static void viewCards(Player player) {
+        System.out.println(player.getName() + ": Type 'view' and press enter to display your cards, and press enter again to hide them...");
+        keyboard.next();
+        System.out.println(player.getName() + "'s cards: " + player.getCards() + "\nType 'hide' and then press enter to hide cards");
+        keyboard.next();
+        ghettoClear();
     }
 
 }
