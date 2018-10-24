@@ -489,12 +489,13 @@ public class PokerRunner {
         /*
          * ACTION ITEM
          * only pay equal to side pot
-         */
+         
         for (Player sideplayer : winners) {
             if (sideplayer.getSidePot()) {
                 sideplayer.addMoney(payout);
             }
         }
+        */
 
     }
 
