@@ -470,7 +470,9 @@ public class PokerRunner {
         }
         int numSidePlayers = 0;
         for (Player player : winners) {
+
             if (player.getSidePot() == 0) {
+
                 player.addMoney(payout); // pay
             } else {
                 numSidePlayers++;
