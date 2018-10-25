@@ -229,6 +229,7 @@ public class PokerRunner {
                             case "view":
                                 System.out.println("Press enter to display your cards, and press enter again to hide them...");
                                 keyboard.nextLine();
+                                keyboard.nextLine();
                                 System.out.println(player.getName() + "'s cards: " + player.getCards() + "\nPress enter to hide cards");
                                 keyboard.nextLine();
                                 ghettoClear();
