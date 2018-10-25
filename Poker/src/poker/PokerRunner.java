@@ -227,6 +227,7 @@ public class PokerRunner {
                         String action = keyboard.next().toLowerCase();
                         switch (action) {
                             case "view":
+
                                 System.out.println("Press enter to display your cards, and press enter again to hide them...");
                                 keyboard.nextLine();
                                 keyboard.nextLine();
@@ -496,8 +497,7 @@ public class PokerRunner {
                 sideplayer.addMoney(payout);
             }
         }
-        */
-
+         */
     }
 
     public static Player[] bestHand(ArrayList<Player> contestants) {
