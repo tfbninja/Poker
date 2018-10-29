@@ -228,6 +228,7 @@ public class PokerRunner {
                         switch (action) {
                             case "view":
                                 System.out.println("Press enter to display your cards, and press enter again to hide them...");
+                                keyboard.nextLine(); // there are two .nextLine()s because otherwise it does it instantly
                                 keyboard.nextLine();
                                 System.out.println(player.getName() + "'s cards: " + player.getCards() + "\nPress enter to hide cards");
                                 keyboard.nextLine();
@@ -327,6 +328,7 @@ public class PokerRunner {
                                 if (currentBet > 0) {
                                     System.out.println("You cannot check a bet, you must either call, raise, or fold");
                                 } else {
+                                    player.setTransientBet(0); // update player
                                     System.out.println("Check successful.");
                                     turnIsOver = true;
                                     break;
@@ -343,6 +345,7 @@ public class PokerRunner {
             for (Player player : players) {
                 tempbool = tempbool && (player.getTransientBet() == currentBet);
             }
+            System.out.println("Resolved: " + tempbool);
             if (tempbool) {
                 resolved = true;
                 for (Player player : players) { // add money to the pot
@@ -427,7 +430,7 @@ public class PokerRunner {
                 boolean invalidResponse = true; // start by assuming their response is invalid
                 while (invalidResponse) {
 
-                    System.out.print("Do you want to reveal your cards? (y/n): "); // prompt
+                    System.out.print(player.getName() + ", do you want to reveal your cards? (y/n): "); // prompt
                     String response = keyboard.next().toLowerCase(); // get their input
 
                     if (response.equals("y") || response.equals("yes") || response.contains("yes") || response.equals("yeet")) { // if yes,
@@ -448,9 +451,10 @@ public class PokerRunner {
 
 
             /*
-         * After figuring out the contesting hands, figure out the best one
-         * using the best possible cards from each player's 2 hole cards and the
-         * 5 community cards.
+             * After figuring out the contesting hands, figure out the best one
+             * using the best possible cards from each player's 2 hole cards and
+             * the
+             * 5 community cards.
              */
             for (Player player : bestHand(finalists)) {
                 winners.add(player);
@@ -462,14 +466,16 @@ public class PokerRunner {
                 }
             }
         }
+        System.out.println("Winners: " + winners.toString());
         int payout = mainPot.getAmount() / winners.size();
         if (mainPot.getAmount() / (double) winners.size() != payout) { // if not easily divisible
-            payout += 1; // just round up
+            payout++; // just round up
         }
         int numSidePlayers = 0;
         for (Player player : winners) {
             if (player.getSidePot() == 0) {
                 player.addMoney(payout); // pay
+                System.out.println(player.getName() + " received $" + payout + ", for a total of $" + player.getMoney());
             } else {
                 numSidePlayers++;
             }
@@ -489,14 +495,13 @@ public class PokerRunner {
         /*
          * ACTION ITEM
          * only pay equal to side pot
-         
-        for (Player sideplayer : winners) {
-            if (sideplayer.getSidePot()) {
-                sideplayer.addMoney(payout);
-            }
-        }
-        */
-
+         *
+         * for (Player sideplayer : winners) {
+         * if (sideplayer.getSidePot()) {
+         * sideplayer.addMoney(payout);
+         * }
+         * }
+         */
     }
 
     public static Player[] bestHand(ArrayList<Player> contestants) {
@@ -542,6 +547,7 @@ public class PokerRunner {
         } else {
             int oldHandsSize = hands.size() + 1;
             while (oldHandsSize > hands.size()) {
+                oldHandsSize = hands.size();
                 for (int index = 0; index < hands.size() - 1; index++) {
                     if (getIntHandRank(hands.get(index)) < getIntHandRank(hands.get(index))) {
                         hands.remove(index);
