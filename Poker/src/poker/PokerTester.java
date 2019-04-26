@@ -54,7 +54,7 @@ public class PokerTester {
 
     public static void shuffleDeck(Deck deckToShuffle) {
         int shuffles = random.nextInt(3) + 1;
-        int cuts = random.nextInt(5) + 1;
+        int cuts = random.nextInt(5) + 3;
         int overhands = random.nextInt(6) + 1;
 
         while (shuffles > 0) {

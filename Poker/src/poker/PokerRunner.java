@@ -51,7 +51,7 @@ public class PokerRunner {
 
         setupGame(); // prompt user for number of players, and get the player's names
 
-        giveMoney(players); // give each player in the list this.startingMoney
+        giveInitialMoney(players); // give each player in the list this.startingMoney
 
         chooseButtons(); // set dealer, little, and big blinds
 
@@ -69,26 +69,53 @@ public class PokerRunner {
         // set size of players list
         int numPlayers = 0;
         while (numPlayers < 2 || numPlayers > 10) {
-            System.out.print("To begin, please enter the number of players: ");
+            System.out.print("To begin, please enter the number of players (2 <= x <= 10): ");
             numPlayers = keyboard.nextInt();
         }
         players = new ArrayList<>(numPlayers);
-        players.clear(); // probably not necessary...
         for (int a = 0; a < numPlayers; a++) {
             players.add(new Player());
         }
 
+        ArrayList<String> names = new ArrayList<>();
         // get names of all the players
         System.out.println("Please enter in the first name of each player.\n");
+        keyboard.nextLine();
         int index = 1;
         for (Player player : players) {
             System.out.print("Player " + index + ": ");
-            player.setName(keyboard.next());
+            player.setName(keyboard.nextLine().trim());
+            if (player.getName().contains(" ")) {
+                if (player.getName().split(" ").length < 4) {
+                    System.out.println("I said first name ya scalawag. *sighs in defeat*");
+                } else {
+                    System.out.println("Having that many names is just unnecessarily pretentious I'm stopping this now.");
+                    player.setName(player.getName().split(" ")[0]);
+                    System.out.println("Your name is now " + player.getName());
+                }
+            }
+            if (names.contains(player.getName().toLowerCase())) {
+                while (names.contains(player.getName().toLowerCase())) {
+                    player.setName(player.getName() + "_" + index);
+                }
+                System.out.println("Your name is now " + player.getName());
+            }
+            names.add(player.getName().toLowerCase());
             index++;
         }
     }
 
-    public static void giveMoney(ArrayList<Player> players) {
+    public static int count(ArrayList<String> list, String obj) {
+        int count = 0;
+        for (String i : list) {
+            if (i.equals(obj)) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public static void giveInitialMoney(ArrayList<Player> players) {
         players.forEach((player) -> {
             player.setMoney(startingMoney);
         });
@@ -217,7 +244,7 @@ public class PokerRunner {
                         if (!communityCards.isEmpty()) {
                             System.out.println("Community cards: " + communityCards);
                         }
-                        System.out.println("Current bet: $" + currentBet);
+                        System.out.println("Current bet: $" + currentBet + "    You have: $" + player.getMoney());
                         if (currentBet > 0) {
                             System.out.println("VALID ACTIONS: view, fold, raise, and call.");
                         } else {
@@ -230,7 +257,7 @@ public class PokerRunner {
 
                                 System.out.println("Press enter to display your cards, and press enter again to hide them...");
                                 keyboard.nextLine(); // there are two .nextLine()s because otherwise it does it instantly
-                                keyboard.nextLine();
+                                //keyboard.nextLine();
                                 keyboard.nextLine();
                                 System.out.println(player.getName() + "'s cards: " + player.getCards() + "\nPress enter to hide cards");
                                 keyboard.nextLine();
@@ -278,11 +305,10 @@ public class PokerRunner {
                                 }
 
                             case "bet":
-
                                 lastToBet = player;
                                 boolean stringBet = false;
                                 if (currentBet > 0) {
-                                    System.out.println("REEEE NO STRING BETS " + player.getName() + "!!!\nString bets are automatically calls");
+                                    System.out.println("*Much slapping of tables*\nREEEE NO STRING BETS " + player.getName() + "!!! \nString bets are automatically calls");
                                     stringBet = true;
                                 }
                                 if (!stringBet) {
@@ -294,15 +320,20 @@ public class PokerRunner {
                                         proposedBet = keyboard.nextInt(); // set to input
 
                                         if (proposedBet > player.getMoney()) { // if they tried to bet more than they have,
-                                            player.goAllIn(); // they automatically are all in
-
+                                            System.out.println("You tried to bet $" + proposedBet + ", but you only have $" + player.getMoney() + ". Would you like to go all-in? (y/n )");
+                                            if (keyboard.nextLine().toLowerCase().contains("y")) {
+                                                player.goAllIn(); // they go all-in
+                                                System.out.println(player.getName() + " is all-in at $" + player.getMoney() + ".");
+                                            } else {
+                                                proposedBet = -1; // reset and let them try to bet a legitimate amount
+                                            }
                                         } else if (proposedBet < bigBet) { // if they tried to bet less than the minimum bet
                                             System.out.println("That is too small, the minimum raise at this time is $" + (bigBet + currentBet)); // tell them and restart the loop
 
                                         } else { // it must have been a legitimate bet
                                             player.setTransientBet(proposedBet); // update the player
                                             currentBet = proposedBet; // update the running bet amt
-                                            System.out.println("$" + proposedBet + " bet was successful.");
+                                            System.out.println(player.getName() + " bet $" + currentBet + ".");
                                         }
                                     }
                                     turnIsOver = true;
@@ -312,6 +343,7 @@ public class PokerRunner {
 
                                 if (player.getMoney() < currentBet) { // the player cannot properly call, therefore
                                     player.goAllIn(); // they have to go all in
+
                                     // or they have just the right amount of money, with the same net effect
                                 } else if (player.getMoney() == currentBet) { // they have just enough money to call
                                     System.out.println("You have just enough money to call, you are now all-in with $" + player.getMoney());
@@ -321,7 +353,7 @@ public class PokerRunner {
 
                                 } else { // they must have enough money to call
                                     player.setTransientBet(currentBet); // update player
-                                    System.out.println("Successfully called $" + currentBet);
+                                    System.out.println(player.getName() + " called $" + currentBet);
                                     turnIsOver = true;
                                     break; // we're done here xD
                                 }
@@ -329,6 +361,7 @@ public class PokerRunner {
                             case "check":
                                 if (currentBet > 0) {
                                     System.out.println("You cannot check a bet, you must either call, raise, or fold");
+
                                 } else {
                                     player.setTransientBet(0); // update player
                                     System.out.println("Check successful.");
@@ -337,7 +370,7 @@ public class PokerRunner {
                                 }
 
                             default:
-                                System.out.println("\nInvalid action \"" + action + "\"\n");
+                                System.out.println("You're not allowed to " + action + " here."); // purposely easy to take advantage of the lax formatting to make the computer say funny things - yw
                         }
                     }
                 }
@@ -347,21 +380,24 @@ public class PokerRunner {
             for (Player player : players) {
                 tempbool = tempbool && (player.getTransientBet() == currentBet);
             }
-            System.out.println("Resolved: " + tempbool);
+            System.out.println(tempbool ? "Resolved." : "Unresolved.");
+
             if (tempbool) {
                 resolved = true;
+                if (currentBet == 0) {
+                    System.out.println("Checked around? Really? Laaaaaame.");
+                }
                 for (Player player : players) { // add money to the pot
                     mainPot.addMoney(player.getTransientBet() - player.getSidePot()); // but only add the stuff that can go in the main pot
                 }
             }
-
         }
         resolved = false; // reset resolved
         currentBet = 0; // reset minimum bet
     }
 
     public static void ghettoClear() {
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 111; i++) {
             System.out.println("\n");
         }
     }
@@ -378,7 +414,6 @@ public class PokerRunner {
     }
 
     public static void flop() {
-
         bPile.addCardTop(mDeck.dealCardTop()); // burn a card
         communityCards.addCardBottom(mDeck.dealCardTop()); // update community cards
         communityCards.addCardBottom(mDeck.dealCardTop());
@@ -420,41 +455,27 @@ public class PokerRunner {
     }
 
     public static void showdown() {
-
         if (getActivePlayers() > 1) {
 
             System.out.println("Reveal your cards if you want to win.");
 
             ArrayList<Player> finalists = new ArrayList<>(); // list of hands that have been revealed
-
             for (Player player : players) { // ask every player if they want to reveal
+                System.out.print(player.getName() + ", do you want to reveal your cards? (y/n) "); // prompt
+                String response = keyboard.next().toLowerCase(); // get their input
 
-                boolean invalidResponse = true; // start by assuming their response is invalid
-                while (invalidResponse) {
+                if (response.contains("y")) { // if yes,
+                    finalists.add(player); // add them to the list of finalists
 
-                    System.out.print(player.getName() + ", do you want to reveal your cards? (y/n): "); // prompt
-                    String response = keyboard.next().toLowerCase(); // get their input
-
-                    if (response.equals("y") || response.equals("yes") || response.contains("yes") || response.equals("yeet")) { // if yes,
-                        finalists.add(player); // add them to the list of finalists
-                        invalidResponse = false; // and continue with the next player
-
-                    } else if (response.equals("n") || response.equals("no") || response.contains("no") || response.equals("yeetn't")) { // if not, that constitutes a fold
-                        System.out.println("You folded your cards."); // alert
-                        invalidResponse = false; // continue with the next player
-                        player.setActive(false); // fold
-
-                    } else { // they entered in something else
-                        System.out.println("Invalid response \"" + response + "\"");
-                        //restart the while loop until they choose
-                    }
+                } else { // if not, that constitutes a fold
+                    System.out.println("You folded your cards."); // alert
+                    player.setActive(false); // fold
                 }
             }
-
-
+            winners.clear();
             /*
              * After figuring out the contesting hands, figure out the best one
-             * using the best possible cards from each player's 2 hole cards and
+             * using the best 5 cards from each player's 2 hole cards and
              * the
              * 5 community cards.
              */
@@ -469,17 +490,14 @@ public class PokerRunner {
             }
         }
         System.out.println("Winners: " + winners.toString());
-        int payout = mainPot.getAmount() / winners.size();
-        if (mainPot.getAmount() / (double) winners.size() != payout) { // if not easily divisible
-            payout++; // just round up
-        }
+        int payout = (int) Math.ceil(mainPot.getAmount() / (double) winners.size());
+
         int numSidePlayers = 0;
         for (Player player : winners) {
-
             if (player.getSidePot() == 0) {
-
                 player.addMoney(payout); // pay
                 System.out.println(player.getName() + " received $" + payout + ", for a total of $" + player.getMoney());
+
             } else {
                 numSidePlayers++;
             }
@@ -489,31 +507,24 @@ public class PokerRunner {
         for (Player sideplayer : winners) {
             totalSidePot += sideplayer.getSidePot(); // calculate side pot
         }
+
+        int sidepayout;
         if (numSidePlayers > 0 && totalSidePot % numSidePlayers > 0) {
-            int sidepayout = totalSidePot / numSidePlayers;
+            sidepayout = totalSidePot / numSidePlayers;
             sidepayout += 1;
         } else if (numSidePlayers > 0) {
-            int sidepayout = totalSidePot / numSidePlayers;
+            sidepayout = totalSidePot / numSidePlayers;
         }
 
         /*
          * ACTION ITEM
          * only pay equal to side pot
-<<<<<<< HEAD
-         
-        for (Player sideplayer : winners) {
-            if (sideplayer.getSidePot()) {
-                sideplayer.addMoney(payout);
-            }
-        }
-=======
          *
          * for (Player sideplayer : winners) {
          * if (sideplayer.getSidePot()) {
          * sideplayer.addMoney(payout);
          * }
          * }
->>>>>>> 9a4b7557611b17b8e7274f6ab92b470cb8728dae
          */
     }
 
